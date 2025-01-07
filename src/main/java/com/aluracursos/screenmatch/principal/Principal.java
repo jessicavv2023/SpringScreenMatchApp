@@ -28,7 +28,7 @@ var serie = teclado.nextLine();
     //aqui se cconvierten los datos en tipo java
 
     DatosSerie datos = conversor.obtenerDatos(json, DatosSerie.class);
-    System.out.println( "A ver "+ datos);
+    System.out.println( "Datos de la serie "+ datos);
 
 //busca datos de todas las temporadas
     List <DatosTemporadas> temporadas = new ArrayList<>();
@@ -40,7 +40,7 @@ var serie = teclado.nextLine();
         }
         temporadas.forEach(System.out::println);
 
-
+    System.out.println( "*****Muestra solo el titulo de los episodios por temporadas ******");
     //Mostrar solo el titulo de los episodios para las temporadas
         for (int i = 0; i < datos.totalDeTemporadas(); i++) {
         List<DatosEpisodio> episodiosDeTemporadas = temporadas.get(i).episodio();
@@ -58,7 +58,7 @@ List <DatosEpisodio> datosEpisodios = temporadas.stream()
         // collect.Collectors.toList da una lista mutabale y con toList solo es inmutable
         .collect(Collectors.toList());
     // Top 5 episodios
-    System.out.println("Los mejores 5 episodios");
+    System.out.println("******Los mejores 5 episodios*****");
     datosEpisodios.stream()
             //filtro para que solo laas calificaiones uqe n osean N/A cuenten para hacer la lista
             .filter(e -> !e.calificacion(). equalsIgnoreCase("N/A"))
@@ -67,12 +67,14 @@ List <DatosEpisodio> datosEpisodios = temporadas.stream()
             //para imitar a los 5 primeros resultados
             .limit(5)
             .forEach(System.out::println);
+    System.out.println("**** Conviertee los datos a una lista de tipo episodio****");
 // Covniertiendo los datos a una lista tipo episodio
     List <Episodio> episodios = temporadas.stream()
     //cada elemento de la lista de tempora se va convertir en tipo Episodio
     .flatMap(t -> t.episodio().stream()
             //se crea un contrucotr en clase Episodio para uqe aqui no dde error
             .map (d -> new Episodio(t.numeroDeTemporada(), d )))
+            .limit(10)
             .collect(Collectors.toList());
 episodios.forEach( System.out::println);
 
