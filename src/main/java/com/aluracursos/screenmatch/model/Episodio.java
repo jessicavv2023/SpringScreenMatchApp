@@ -1,5 +1,6 @@
 package com.aluracursos.screenmatch.model;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 
 public class Episodio {
@@ -8,6 +9,24 @@ public class Episodio {
     private Double calificacion;
     private Integer numeroEpisodio;
     private LocalDate fechaDeLanzamiento;
+
+
+    public Episodio(Integer numero, DatosEpisodio d ){
+        this.temporada = numero;
+        this.titulo = d.titulo();
+        this.numeroEpisodio = d.numeroDeEpisodio();
+        try {
+            this.calificacion = Double.valueOf( d.calificacion());
+        }catch (NumberFormatException e){
+            this.calificacion=0.0;
+        }
+try{
+    this.fechaDeLanzamiento = LocalDate.parse(d.fechaDeLanzamiento()) ;
+}catch (DateTimeException e){
+    this.fechaDeLanzamiento=null;
+}
+
+    }
 
     public Integer getTemporada() {
         return temporada;
@@ -47,5 +66,16 @@ public class Episodio {
 
     public void setFechaDeLanzamiento(LocalDate fechaDeLanzamiento) {
         this.fechaDeLanzamiento = fechaDeLanzamiento;
+    }
+
+    @Override
+    public String toString() {
+        return " Este es de la clase Episodio{" +
+                "temporada=" + temporada +
+                ", titulo='" + titulo + '\'' +
+                ", calificacion=" + calificacion +
+                ", numeroEpisodio=" + numeroEpisodio +
+                ", fechaDeLanzamiento=" + fechaDeLanzamiento +
+                '}';
     }
 }

@@ -3,9 +3,12 @@ package com.aluracursos.screenmatch.principal;
 import com.aluracursos.screenmatch.model.DatosEpisodio;
 import com.aluracursos.screenmatch.model.DatosSerie;
 import com.aluracursos.screenmatch.model.DatosTemporadas;
+import com.aluracursos.screenmatch.model.Episodio;
 import com.aluracursos.screenmatch.service.ConsumoAPI;
 import com.aluracursos.screenmatch.service.ConvierteDatos;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -64,7 +67,34 @@ List <DatosEpisodio> datosEpisodios = temporadas.stream()
             //para imitar a los 5 primeros resultados
             .limit(5)
             .forEach(System.out::println);
+// Covniertiendo los datos a una lista tipo episodio
+    List <Episodio> episodios = temporadas.stream()
+    //cada elemento de la lista de tempora se va convertir en tipo Episodio
+    .flatMap(t -> t.episodio().stream()
+            //se crea un contrucotr en clase Episodio para uqe aqui no dde error
+            .map (d -> new Episodio(t.numeroDeTemporada(), d )))
+            .collect(Collectors.toList());
+episodios.forEach( System.out::println);
 
+
+
+//busqueda de episodio a partir del año
+    System.out.println("Igresa el año a partir de cual deseas buscar el capitulo de la serie ");
+    var añoEpisodio = teclado.nextInt();
+    teclado.nextLine();
+
+    // se crea fecha de bsuqueda a paritr de loque ingresa el usuario
+    LocalDate fechaBusqueda =LocalDate.of(añoEpisodio, 1 , 1);
+
+    // para cambiar el estipo de fecha de lanzamiento
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+    episodios.stream()
+            .filter( e -> e.getFechaDeLanzamiento()  != null && e.getFechaDeLanzamiento().isAfter(fechaBusqueda))
+            .forEach(e -> System.out.println(
+                    " **Temporada ** " + e.getTemporada() + " **Episodio** " + e.getTitulo() +
+                            " **Calificacion** " + e.getCalificacion() + " **Fecha de lanzamineto** " + e.getFechaDeLanzamiento().format(dtf)
+            ));
 
 }
 }
