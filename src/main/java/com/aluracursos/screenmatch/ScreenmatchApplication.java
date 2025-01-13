@@ -38,8 +38,4 @@ public class ScreenmatchApplication implements CommandLineRunner {
 		Principal principal = new Principal();
 		 principal.muestraElMenu();
 	}
-
-
-
-
 }
